@@ -9,6 +9,7 @@ import Input from "../../components/Input";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import { theme } from "../../constants/theme";
 import { hp, wp } from "../../helpers/common";
+import { signUp } from "../../lib/auth";
 
 export default function SignUp() {
   const router = useRouter();
@@ -20,30 +21,30 @@ export default function SignUp() {
 
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async () => {
-    if (
-      !nameRef.current ||
-      !emailRef.current ||
-      !passwordRef.current ||
-      !confirmPasswordRef.current
-    ) {
-      Alert.alert("Sign Up", "Please fill all the fields");
-      return;
+  const handleSignUp = async () => {
+    const name = nameRef.current.trim();
+    const email = emailRef.current.trim();
+    const password = passwordRef.current.trim();
+    const confirmPassword = confirmPasswordRef.current.trim();
+
+    if (!name || !email || !password || !confirmPassword) {
+      return Alert.alert("Sign Up", "Please fill all the fields");
     }
 
-    if (passwordRef.current !== confirmPasswordRef.current) {
-      Alert.alert("Sign Up", "Passwords do not match");
-      return;
+    if (password !== confirmPassword) {
+      return Alert.alert("Sign Up", "Passwords do not match");
     }
 
     try {
       setLoading(true);
-      // TODO: call your API here
-      // await signUpUser(nameRef.current, emailRef.current, passwordRef.current);
+      const data = await signUp(email, password);
+      console.log("✅ Supabase sign-up success:", data);
+
       Alert.alert("Success", "Account created successfully!");
-      router.push("/login"); // navigate back to login
-    } catch (error) {
-      Alert.alert("Error", "Something went wrong. Please try again.");
+      router.push("/login");
+    } catch (err) {
+      console.error("❌ Sign-up error:", err.message);
+      Alert.alert("Error", err.message);
     } finally {
       setLoading(false);
     }
@@ -52,10 +53,11 @@ export default function SignUp() {
   return (
     <ScreenWrapper bg="white">
       <StatusBar style="dark" />
+
       <View style={styles.container}>
         <BackButton router={router} />
 
-        {/* Welcome */}
+        {/* Header */}
         <View>
           <Text style={styles.welcomeText}>Create</Text>
           <Text style={styles.welcomeText}>Your Account</Text>
@@ -68,48 +70,37 @@ export default function SignUp() {
           <Input
             icon={<Icon name="user" size={26} strokeWidth={1.6} />}
             placeholder="Full Name"
-            onChangeText={(value) => (nameRef.current = value)}
+            onChangeText={(val) => (nameRef.current = val)}
           />
 
           <Input
             icon={<Icon name="mail" size={26} strokeWidth={1.6} />}
             placeholder="Email Address"
-            onChangeText={(value) => (emailRef.current = value)}
+            onChangeText={(val) => (emailRef.current = val)}
           />
 
           <Input
             icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
             placeholder="Password"
             secureTextEntry
-            onChangeText={(value) => (passwordRef.current = value)}
+            onChangeText={(val) => (passwordRef.current = val)}
           />
 
           <Input
             icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
             placeholder="Confirm Password"
             secureTextEntry
-            onChangeText={(value) => (confirmPasswordRef.current = value)}
+            onChangeText={(val) => (confirmPasswordRef.current = val)}
           />
 
-          {/* Buttons */}
-          <Button title="Sign Up" loading={loading} onPress={onSubmit} />
+          <Button title="Sign Up" loading={loading} onPress={handleSignUp} />
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Already have an account?</Text>
           <Pressable onPress={() => router.push("/login")}>
-            <Text
-              style={[
-                styles.footerText,
-                {
-                  color: theme.colors.primaryDark,
-                  fontWeight: theme.fonts.semibold,
-                },
-              ]}
-            >
-              Login
-            </Text>
+            <Text style={[styles.footerText, styles.linkText]}>Login</Text>
           </Pressable>
         </View>
       </View>
@@ -144,7 +135,10 @@ const styles = StyleSheet.create({
   footerText: {
     textAlign: "center",
     color: theme.colors.text,
-    gap: 5,
     fontSize: hp(1.6),
+  },
+  linkText: {
+    color: theme.colors.primaryDark,
+    fontWeight: theme.fonts.semibold,
   },
 });

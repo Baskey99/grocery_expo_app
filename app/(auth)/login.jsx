@@ -9,19 +9,39 @@ import Input from "../../components/Input";
 import ScreenWrapper from "../../components/ScreenWrapper";
 import { theme } from "../../constants/theme";
 import { hp, wp } from "../../helpers/common";
+import { signIn } from "../../lib/auth";
 
 export default function Login() {
   const router = useRouter();
-
   const emailRef = useRef("");
   const passwordRef = useRef("");
-
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
-    if(!emailRef.current || !passwordRef.current) {
+    if (!emailRef.current || !passwordRef.current) {
       Alert.alert("Login", "Please fill all the fields");
       return;
+    }
+
+    try {
+      setLoading(true);
+      const data = await signIn(
+        emailRef.current.trim(),
+        passwordRef.current.trim()
+      );
+
+      console.log("✅ Supabase login success----:", data);
+
+      if (data?.user) {
+        Alert.alert("Success", "Logged in successfully!");
+        router.replace("/"); // Redirect to home or dashboard
+      } else {
+        Alert.alert("Login", "Unable to log in. Please try again.");
+      }
+    } catch (error) {
+      Alert.alert("Login Error", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,6 +50,7 @@ export default function Login() {
       <StatusBar style="dark" />
       <View style={styles.container}>
         <BackButton router={router} />
+
         {/* Welcome */}
         <View>
           <Text style={styles.welcomeText}>Hey,</Text>
@@ -39,18 +60,22 @@ export default function Login() {
         {/* Form */}
         <View style={styles.form}>
           <Text style={styles.formText}>Please login to continue</Text>
+
           <Input
             icon={<Icon name="mail" size={26} strokeWidth={1.6} />}
-            placeholder="Enter you Email"
+            placeholder="Enter your Email"
             onChangeText={(value) => (emailRef.current = value)}
           />
+
           <Input
             icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
             placeholder="Enter your Password"
-            secureTextEntry={true}
+            secureTextEntry
             onChangeText={(value) => (passwordRef.current = value)}
           />
+
           <Text style={styles.forgotPassword}>Forgot Password?</Text>
+
           {/* Buttons */}
           <Button title="Login" loading={loading} onPress={onSubmit} />
         </View>
@@ -58,7 +83,7 @@ export default function Login() {
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Don't have an account?</Text>
-          <Pressable onPress={() => router.push('sign-up')}>
+          <Pressable onPress={() => router.push("sign-up")}>
             <Text
               style={[
                 styles.footerText,
