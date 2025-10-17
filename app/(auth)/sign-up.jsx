@@ -10,18 +10,42 @@ import ScreenWrapper from "../../components/ScreenWrapper";
 import { theme } from "../../constants/theme";
 import { hp, wp } from "../../helpers/common";
 
-export default function Login() {
+export default function SignUp() {
   const router = useRouter();
 
+  const nameRef = useRef("");
   const emailRef = useRef("");
   const passwordRef = useRef("");
+  const confirmPasswordRef = useRef("");
 
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
-    if(!emailRef.current || !passwordRef.current) {
-      Alert.alert("Login", "Please fill all the fields");
+    if (
+      !nameRef.current ||
+      !emailRef.current ||
+      !passwordRef.current ||
+      !confirmPasswordRef.current
+    ) {
+      Alert.alert("Sign Up", "Please fill all the fields");
       return;
+    }
+
+    if (passwordRef.current !== confirmPasswordRef.current) {
+      Alert.alert("Sign Up", "Passwords do not match");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      // TODO: call your API here
+      // await signUpUser(nameRef.current, emailRef.current, passwordRef.current);
+      Alert.alert("Success", "Account created successfully!");
+      router.push("/login"); // navigate back to login
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -30,35 +54,51 @@ export default function Login() {
       <StatusBar style="dark" />
       <View style={styles.container}>
         <BackButton router={router} />
+
         {/* Welcome */}
         <View>
-          <Text style={styles.welcomeText}>Hey,</Text>
-          <Text style={styles.welcomeText}>Welcome Back</Text>
+          <Text style={styles.welcomeText}>Create</Text>
+          <Text style={styles.welcomeText}>Your Account</Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
-          <Text style={styles.formText}>Please login to continue</Text>
+          <Text style={styles.formText}>Please fill in the details below</Text>
+
+          <Input
+            icon={<Icon name="user" size={26} strokeWidth={1.6} />}
+            placeholder="Full Name"
+            onChangeText={(value) => (nameRef.current = value)}
+          />
+
           <Input
             icon={<Icon name="mail" size={26} strokeWidth={1.6} />}
-            placeholder="Enter you Email"
+            placeholder="Email Address"
             onChangeText={(value) => (emailRef.current = value)}
           />
+
           <Input
             icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
-            placeholder="Enter your Password"
-            secureTextEntry={true}
+            placeholder="Password"
+            secureTextEntry
             onChangeText={(value) => (passwordRef.current = value)}
           />
-          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+
+          <Input
+            icon={<Icon name="lock" size={26} strokeWidth={1.6} />}
+            placeholder="Confirm Password"
+            secureTextEntry
+            onChangeText={(value) => (confirmPasswordRef.current = value)}
+          />
+
           {/* Buttons */}
-          <Button title="Login" loading={loading} onPress={onSubmit} />
+          <Button title="Sign Up" loading={loading} onPress={onSubmit} />
         </View>
 
         {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Don't have an account?</Text>
-          <Pressable onPress={() => router.push('sign-up')}>
+          <Text style={styles.footerText}>Already have an account?</Text>
+          <Pressable onPress={() => router.push("/login")}>
             <Text
               style={[
                 styles.footerText,
@@ -68,7 +108,7 @@ export default function Login() {
                 },
               ]}
             >
-              Sign Up
+              Login
             </Text>
           </Pressable>
         </View>
@@ -94,11 +134,6 @@ const styles = StyleSheet.create({
   formText: {
     color: theme.colors.text,
     fontSize: hp(1.5),
-  },
-  forgotPassword: {
-    textAlign: "right",
-    fontWeight: theme.fonts.semibold,
-    color: theme.colors.text,
   },
   footer: {
     flexDirection: "row",
