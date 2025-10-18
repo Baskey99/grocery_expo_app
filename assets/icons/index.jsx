@@ -1,4 +1,5 @@
 import { theme } from "../../constants/theme";
+import ArrowDown from "./ArrowDown";
 import ArrowLeft from "./ArrowLeft";
 import Call from "./Call";
 import Camera from "./Camera";
@@ -34,6 +35,7 @@ const icons = {
   camera: Camera,
   edit: Edit,
   arrowLeft: ArrowLeft,
+  arrowDown: ArrowDown,
   threeDotsCircle: ThreeDotsCircle,
   threeDotsHorizontal: ThreeDotsHorizontal,
   comment: Comment,
