@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useRef, useState } from "react";
-import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
 import Icon from "../../assets/icons";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
@@ -56,6 +56,11 @@ export default function Login() {
           <Text style={styles.welcomeText}>Hey,</Text>
           <Text style={styles.welcomeText}>Welcome Back</Text>
         </View>
+        <Image
+          style={styles.welcomeImage}
+          resizeMode="contain"
+          source={require("../../assets/images/welcome.png")}
+        />
 
         {/* Form */}
         <View style={styles.form}>
@@ -74,7 +79,9 @@ export default function Login() {
             onChangeText={(value) => (passwordRef.current = value)}
           />
 
-          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+          <Pressable onPress={() => router.push("forgot-password")}>
+            <Text style={styles.forgotPassword}>Forgot Password?</Text>
+          </Pressable>
 
           {/* Buttons */}
           <Button title="Login" loading={loading} onPress={onSubmit} />
@@ -136,5 +143,10 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     gap: 5,
     fontSize: hp(1.6),
+  },
+  welcomeImage: {
+    height: hp(30),
+    width: wp(100),
+    alignSelf: "center",
   },
 });

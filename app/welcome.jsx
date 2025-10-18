@@ -31,7 +31,7 @@ export default function Welcome() {
           <Button
             title="Getting Started"
             buttonStyle={{ marginHorizontal: wp(3) }}
-            onPress={() => router.push('signUp')}
+            onPress={() => router.push('sign-up')}
           />
           <View style={styles.bottomTextContainer}>
                 <Text style={styles.loginText}>Already have an account !</Text>
