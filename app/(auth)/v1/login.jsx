@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-    ActivityIndicator,
-    Animated,
-    Image,
-    Platform,
-    StatusBar,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Animated,
+  Image,
+  Platform,
+  StatusBar,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import Icon from "../../../assets/icons";
 import CustomText from "../../../components/CustomText";
@@ -14,10 +14,29 @@ import BreakerText from "../../../components/ui/BreakerText";
 import PhoneInput from "../../../components/ui/PhoneInput";
 import SocialLogin from "../../../components/ui/SocialLogin";
 import { loginStyles as styles } from "../../../constants/style/authStyles";
+import useKeyboardOffsetHeight from "../../../utils/useKeyboardOffsetHeight";
 
 export default function LoginScreen() {
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const keyboardOffsetHeight = useKeyboardOffsetHeight();
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if(keyboardOffsetHeight == 0) {
+      Animated.timing(animatedValue, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(animatedValue, {
+        toValue: -keyboardOffsetHeight * 0.25,
+        duration: 500,
+        useNativeDriver: true,
+      })
+    }
+  }, [keyboardOffsetHeight]);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -37,6 +56,9 @@ export default function LoginScreen() {
         bounces={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
+        style={{
+          transform: [{ translateY: animatedValue }],
+        }}
         contentContainerStyle={styles.bottomContainer}
       >
         <CustomText variant="h2" style={styles.title}>
@@ -71,7 +93,6 @@ export default function LoginScreen() {
 
         <SocialLogin />
       </Animated.ScrollView>
-
       <View style={styles.footer}>
         <CustomText>By continuing, you agree to our</CustomText>
         <View style={styles.footerTextContainer}>
@@ -80,6 +101,7 @@ export default function LoginScreen() {
           <CustomText style={styles.footerText}>Content Policies</CustomText>
         </View>
       </View>
+
     </View>
   );
 }

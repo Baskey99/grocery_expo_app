@@ -1,23 +1,26 @@
-import Svg from "react-native-svg";
+import Svg, { Path } from "react-native-svg";
 
-const ArrowDown = (props) => (
-  <Svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    color="#000000"
-    fill="none"
-    {...props}
-  >
-    <path
-      d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"
-      stroke="currentColor"
-      strokeWidth={props.strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </Svg>
-);
-
-export default ArrowDown;
+export default function ArrowDown({
+  size = 24,
+  color = "#000000",
+  strokeWidth = 2,
+  ...props
+}) {
+  return (
+    <Svg
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      {...props} // allows parent components to override width, height, etc.
+    >
+      <Path
+        d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}

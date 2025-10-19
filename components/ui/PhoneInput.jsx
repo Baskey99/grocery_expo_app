@@ -13,12 +13,12 @@ export default function PhoneInput({
   return (
     <View style={styles.container}>
       <Pressable style={styles.countryPickerContainer}>
-        <CustomText variant="h2">🇮🇳</CustomText>
+        <CustomText variant="h5">🇮🇳</CustomText>
         {icon && icon}
       </Pressable>
 
       <View style={styles.phoneInputContainer}>
-        <CustomText variant="h2">+91</CustomText>
+        <CustomText variant="h7">+91</CustomText>
         <TextInput
           placeholder="Enter Phone Number"
           keyboardType="phone-pad"

@@ -39,6 +39,18 @@ export default function Welcome() {
                     <Text style={[styles.loginText, {color: theme.colors.primaryDark, fontWeight: theme.fonts.semibold}]}>
                         Login
                     </Text>
+                    
+                </Pressable>
+                <Pressable onPress={() => router.push('splash-screen')}>
+                    <Text style={[styles.loginText, {color: theme.colors.primaryDark, fontWeight: theme.fonts.semibold}]}>
+                        splash screen
+                    </Text>                    
+                </Pressable>
+
+                <Pressable onPress={() => router.push('/v1/login')}>
+                    <Text style={[styles.loginText, {color: theme.colors.primaryDark, fontWeight: theme.fonts.semibold}]}>
+                        login v1
+                    </Text>                    
                 </Pressable>
           </View>
         </View>
