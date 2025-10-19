@@ -100,7 +100,7 @@ export const loginStyles = StyleSheet.create({
     marginTop: 5,
   },
   footerText: {
-    textDecorationLine: "underline",
+    // textDecorationLine: "underline",
     fontSize: 10,
   },
 });

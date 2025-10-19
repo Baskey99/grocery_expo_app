@@ -1,4 +1,4 @@
 # grocery_expo_app
-Food delivery mobile app
-recent changes
-second data
+
+1. Run the following command to start the app
+npx expo start -c --tunnel

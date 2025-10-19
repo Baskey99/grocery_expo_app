@@ -1,13 +1,30 @@
 import { useState } from "react";
-import { Animated, Image, Platform, StatusBar, View } from "react-native";
+import {
+    ActivityIndicator,
+    Animated,
+    Image,
+    Platform,
+    StatusBar,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import Icon from "../../../assets/icons";
 import CustomText from "../../../components/CustomText";
 import BreakerText from "../../../components/ui/BreakerText";
 import PhoneInput from "../../../components/ui/PhoneInput";
+import SocialLogin from "../../../components/ui/SocialLogin";
 import { loginStyles as styles } from "../../../constants/style/authStyles";
 
 export default function LoginScreen() {
   const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    setLoading(false);
+  };
   return (
     <View style={styles.container}>
       <StatusBar hidden={Platform.OS !== "android"} />
@@ -34,7 +51,35 @@ export default function LoginScreen() {
           value={phone}
           icon={<Icon name="arrowDown" size={26} strokeWidth={1.6} />}
         />
+
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          disabled={loading}
+          onPress={handleLogin}
+          activeOpacity={0.8}
+        >
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <CustomText variant="h5" color="#fff">
+              Continue
+            </CustomText>
+          )}
+        </TouchableOpacity>
+
+        <BreakerText text="or" />
+
+        <SocialLogin />
       </Animated.ScrollView>
+
+      <View style={styles.footer}>
+        <CustomText>By continuing, you agree to our</CustomText>
+        <View style={styles.footerTextContainer}>
+          <CustomText style={styles.footerText}>Terms of Service</CustomText>
+          <CustomText style={styles.footerText}>Privacy Policy</CustomText>
+          <CustomText style={styles.footerText}>Content Policies</CustomText>
+        </View>
+      </View>
     </View>
   );
 }
