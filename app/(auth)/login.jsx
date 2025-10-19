@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useRef, useState } from "react";
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
 import Icon from "../../assets/icons";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
@@ -56,11 +56,11 @@ export default function Login() {
           <Text style={styles.welcomeText}>Hey,</Text>
           <Text style={styles.welcomeText}>Welcome Back</Text>
         </View>
-        <Image
+        {/* <Image
           style={styles.welcomeImage}
           resizeMode="contain"
           source={require("../../assets/images/welcome.png")}
-        />
+        /> */}
 
         {/* Form */}
         <View style={styles.form}>

@@ -13,6 +13,7 @@ import Location from "./Location";
 import Lock from "./Lock";
 import Logout from "./logout";
 import Mail from "./Mail";
+import Mic from "./Mic";
 import Plus from "./Plus";
 import Search from "./Search";
 import Send from "./Send";
@@ -45,6 +46,7 @@ const icons = {
   logout: Logout,
   image: Image,
   video: Video,
+  mic: Mic,
 };
 
 const Icon = ({ name, ...props }) => {
